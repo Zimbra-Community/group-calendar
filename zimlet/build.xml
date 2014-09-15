@@ -1,0 +1,107 @@
+<!--
+
+Generalized Zimbra zimlet Ant buildfile.
+@author Dennis Plöger <develop@dieploegers.de>
+
+Needs jsch-libraries for the deployment task.
+
+-->
+
+<project name="Zimlet" default="build" basedir=".">
+
+    <description>Zimlet building and deployment</description>
+
+    <target name="init" description="Initialize project">
+
+        <!-- Read in configuration properties -->
+
+        <property file="build.properties"/>
+
+        <!-- Fill up empty properties with distribution properties -->
+
+        <property file="build_dist.properties" />
+
+        <!-- Filename for zimlet -->
+
+        <property name="build.zipfile" value="${dist.name}.zip"/>
+
+        <patternset id="zimlet.sources"
+                    includes="*.css, *.xml, *.js, *.properties"
+                    excludes="build.*" />
+
+    </target>
+
+    <target name="build" description="Build zimlet" depends="init">
+
+        <zip basedir="${basedir}" destfile="${build.zipfile}">
+            <patternset refid="zimlet.sources"/>
+        </zip>
+
+
+    </target>
+
+    <target name="deploy_dev"
+            description="Deploy zimlet into a development directory on a development server"
+            depends="init">
+
+        <!-- Rebuild target directory -->
+
+        <sshexec host="${dev.deploy.host}" username="${dev.deploy.user}"
+                 keyfile="${dev.deploy.keyfile}"
+                 command="rm -rf ${dev.deploy.directory}/${dist.name}"
+                 failonerror="false" />
+
+        <!-- Create _dev-directory in case it doesn't exist -->
+
+        <sshexec host="${dev.deploy.host}" username="${dev.deploy.user}"
+                 keyfile="${dev.deploy.keyfile}"
+                 command="mkdir -p ${dev.deploy.directory}"
+                 failonerror="false" />
+
+        <!-- Create dev directory -->
+
+        <sshexec host="${dev.deploy.host}" username="${dev.deploy.user}"
+                 keyfile="${dev.deploy.keyfile}"
+                 command="mkdir -p ${dev.deploy.directory}/${dist.name}" />
+
+        <!-- Transfer files to _dev-directory -->
+
+        <scp
+            todir="${dev.deploy.user}@${dev.deploy.host}:${dev.deploy.directory}/${dist.name}"
+             keyfile="${deploy.keyfile}">
+
+            <fileset dir="${basedir}">
+                <patternset refid="zimlet.sources" />
+            </fileset>
+
+        </scp>
+
+    </target>
+
+    <target name="deploy_dev_flush"
+            description="Deploys the zimlet to a development server and flushes the uistrings cache"
+            depends="deploy_dev">
+
+        <!-- Flush caches -->
+
+        <sshexec host="${deploy.host}" username="${deploy.user}"
+                 command="zmprov fc uistrings" failonerror="false"
+                 keyfile="${deploy.keyfile}"/>
+
+    </target>
+
+    <target name="deploy_prod"
+            description="Deploy zimlet to a server" depends="build">
+
+        <scp file="${build.zipfile}"
+            todir="${deploy.user}@${deploy.host}:${deploy.tmppath}/${build.zipfile}"
+            keyfile="${deploy.keyfile}" />
+
+        <sshexec host="${deploy.host}" username="${deploy.user}"
+                 command="zmzimletctl deploy ${deploy.tmppath}/${build.zipfile}"
+                 keyfile="${deploy.keyfile}"
+        />
+
+    </target>
+
+</project>

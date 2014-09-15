@@ -1,0 +1,106 @@
+<!--
+
+Generalized Zimbra server extension Ant buildfile.
+@author Dennis Plöger <develop@dieploegers.de>
+
+Needs jsch-libraries for the deployment tasks.
+
+-->
+
+<project name="Serverextension" default="jar">
+
+    <description>Building and deployment of a Zimbra Server
+        extension</description>
+
+    <!-- Read in site properties -->
+
+    <property file="build.properties" />
+
+    <!-- Fill up empty properties with distribution properties -->
+
+    <property file="build_dist.properties" />
+
+    <!-- Project properties -->
+
+    <property name="project.manifest" value="conf/MANIFEST.MF"/>
+    <property name="build.dir" value="build" />
+    <property name="dist.dir" value="dist" />
+    <property name="dist.jarfile"
+              value="${dist.dir}/${dist.name}.jar"/>
+
+    <!-- Zimbra properties -->
+
+    <property name="common.dir" location="${zimbra.src}/ZimbraCommon" />
+    <property name="common.classes.dir" location="${common.dir}/build/classes" />
+    <property name="common.jars.dir" location="${common.dir}/jars" />
+    <property name="zimbraServer.dir" value="${zimbra.src}/ZimbraServer" />
+    <property name="zimbraServer.classes.dir" value="${zimbraServer.dir}/build/classes" />
+    <property name="zimbraServer.jars.dir" value="${zimbraServer.dir}/jars" />
+    <property name="zimbraSoap.dir" value="${zimbra.src}/ZimbraSoap" />
+    <property name="zimbraSoap.classes.dir" value="${zimbraSoap.dir}/build/classes" />
+    <property name="zimbraSoap.jars.dir" value="${zimbraSoap.dir}/jars" />
+    <property name="zimbraClient.dir" value="${zimbra.src}/ZimbraClient" />
+    <property name="zimbraClient.classes.dir" value="${zimbraClient.dir}/build/classes" />
+
+    <path id="class.path">
+        <pathelement location="${common.classes.dir}" />
+        <pathelement location="${zimbraServer.classes.dir}"/>
+        <pathelement location="${zimbraSoap.classes.dir}"/>
+        <pathelement location="${zimbraClient.classes.dir}"/>
+        <fileset dir="${common.jars.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${zimbraServer.jars.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${zimbraSoap.jars.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="compile" description="Compiles the source code">
+        <path id="all.java.path">
+            <pathelement location="src" />
+        </path>
+
+        <mkdir dir="${build.dir}" />
+
+        <javac includeantruntime="false" destdir="${build.dir}" debug="true"
+               classpathref="class.path">
+            <src refid="all.java.path" />
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile" description="Creates the jar file">
+        <jar manifest="${project.manifest}"
+             destfile="${dist.jarfile}" basedir="${build.dir}" />
+    </target>
+
+    <target name="deploy" depends="jar"
+            description="Transfers the jar to the server">
+
+        <sshexec host="${deploy.host}" username="${deploy.username}"
+                 command="mkdir ${deploy.path}"
+                 failonerror="false" keyfile="${deploy.keyfile}"/>
+
+        <scp file="${dist.jarfile}"
+             todir="${deploy.username}@${deploy.host}:${deploy.path}"
+             keyfile="${deploy.keyfile}"/>
+
+    </target>
+
+    <target name="deployrestart" depends="deploy"
+            description="Deploy the jar file and restart mailboxd">
+
+        <sshexec host="${deploy.host}" username="root"
+                 command="${deploy.restartmailboxd}"
+                 keyfile="${deploy.keyfile}"/>
+
+    </target>
+
+    <target name="clean">
+        <delete dir="${build.dir}" failonerror="false"/>
+        <delete dir="${dist.dir}" failonerror="false"/>
+    </target>
+
+</project>
