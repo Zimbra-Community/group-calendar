@@ -37,3 +37,4 @@ build.properties
 build/
 dist/
 agent/caching.db
+zimlet/*.zip

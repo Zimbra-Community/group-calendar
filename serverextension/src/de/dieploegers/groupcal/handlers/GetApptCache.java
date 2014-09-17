@@ -74,6 +74,14 @@ public class GetApptCache extends DocumentHandler {
         String jdbcDriver = LC.get("groupcal_jdbc_driver");
         String jdbcUser = LC.get("groupcal_jdbc_user");
         String jdbcPassword = LC.get("groupcal_jdbc_password");
+
+        if (jdbcUrl.isEmpty()) {
+            jdbcUrl = "jdbc:sqlite:/opt/zimbra/data/caching.db";
+        }
+
+        if (jdbcDriver.isEmpty()) {
+            jdbcDriver = "org.sqlite.JDBC";
+        }
         
         try {
             
