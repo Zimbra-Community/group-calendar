@@ -1,0 +1,9 @@
+/* 
+    Document   : de_dieploegers_groupcal.css
+    Author     : Dennis Ploeger <develop@dieploegers.de>
+    Description: Group calendar zimlet
+*/
+
+.GroupCalView tr {
+    vertical-align: top;
+}

@@ -1,0 +1,15 @@
+<!--
+    Document   : de_dieploegers_groupcal.xml
+    Author     : Dennis Ploeger <develop@dieploegers.de>
+    Description: Group calendar zimlet
+-->
+
+<zimlet name="de_dieploegers_groupcal" version="1.0"
+        description="${msg.ZIMLETDESCRIPTION}">
+    <include>de_dieploegers_groupcal.js</include>
+    <include>de_dieploegers_groupcalAutocomplete.js</include>
+    <include>de_dieploegers_groupcalMonthView.js</include>
+    <include>de_dieploegers_groupcalWeekView.js</include>
+    <includeCSS>de_dieploegers_groupcal.css</includeCSS>
+    <handlerObject>de_dieploegers_groupcalHandlerObject</handlerObject>
+</zimlet>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : config_template.xml
+    Author     : Dennis Ploeger <develop@dieploegers.de>
+    Description: Group calendar zimlet
+-->
+
+<zimletConfig name="de_dieploegers_groupcal" version="1.0">
+</zimletConfig>
