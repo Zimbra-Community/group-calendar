@@ -145,7 +145,7 @@ public class GetAvailableGroups extends DocumentHandler {
 
             // Add distribution list to response
 
-            Element groupElement = response.addUniqueElement("Group");
+            Element groupElement = response.addNonUniqueElement("Group");
             groupElement.addUniqueElement("Name").addText(
                 currentList.getCn()
             );

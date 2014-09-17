@@ -105,7 +105,7 @@ public class GetApptCache extends DocumentHandler {
                     results.getString("APPTDATA")
                 );
 
-                response.addUniqueElement(currentAppt);
+                response.addNonUniqueElement(currentAppt);
                 
             }
 

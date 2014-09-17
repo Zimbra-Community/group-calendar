@@ -70,16 +70,6 @@ de_dieploegers_groupcalHandlerObject.prototype.appLaunch =
 
             // Add AutoComplete
 
-            this.autocompleteHandler = new de_dieploegers_groupcalAutocomplete();
-
-            this.autocomplete = new ZmAutocompleteListView({
-                dataClass: this.autocompleteHandler,
-                compCallback: new AjxCallback(
-                    this,
-                    this.handleAutocomplete
-                )
-            });
-
             this.autocomplete.handle(this.searchField.getInputElement(), null);
 
             // Add group tree
@@ -426,7 +416,7 @@ de_dieploegers_groupcalHandlerObject.prototype.fetchGroups =
 
         // Fetch from Backend
 
-        soapDoc = AjxSoapDoc.create("GetAvailableGroups", "urn:groupCal");
+        soapDoc = AjxSoapDoc.create("GetAvailableGroupsRequest", "urn:groupCal");
 
         appCtxt.getAppController().sendRequest(
             {
@@ -457,7 +447,7 @@ de_dieploegers_groupcalHandlerObject.prototype.fetchPersonData =
 
         // Fetch appointments from appointment cache
 
-        soapDoc = AjxSoapDoc.create("GetApptCache", "urn:groupCal");
+        soapDoc = AjxSoapDoc.create("GetApptCacheRequest", "urn:groupCal");
         soapDoc.set("account", uid);
         soapDoc.set("startDate", this.startDate.getTime() / 1000);
         soapDoc.set("endDate", this.endDate.getTime() / 1000);
@@ -629,18 +619,31 @@ de_dieploegers_groupcalHandlerObject.prototype.handleFetchGroups =
 
         }
 
+        if (
+            !response.getResponse().
+                GetAvailableGroupsResponse.hasOwnProperty("Group")
+        ) {
+
+            // There are no groups. Return empty.
+
+            return;
+
+        }
+
         responseGroups =
-            response.getResponse().GetAvailableGroupsResponse.Group;
+            [].concat(response.getResponse().GetAvailableGroupsResponse.Group);
 
         if (this.doCreateApp) {
 
+            // We have groups, we can build the app
+
             this.doCreateApp = false;
 
-            if (responseGroups.length > 0) {
+            this.buildApp();
 
-                this.buildApp();
+            // Return for now.
 
-            }
+            return;
 
         }
 
@@ -654,43 +657,43 @@ de_dieploegers_groupcalHandlerObject.prototype.handleFetchGroups =
 
             currentData = {};
 
-            currentData.name = responseGroups[i].Name[0]._content;
+            currentData.name = responseGroups[i].Name._content;
             currentData.description =
-                responseGroups[i].Description[0]._content;
+                responseGroups[i].Description._content;
 
             currentData.members = [];
 
             for (a = 0;
-                 a < responseGroups[i].Members[0].Member.length;
+                 a < responseGroups[i].Members.Member.length;
                  a = a + 1
                 ) {
 
                 if ((this.lastSelectedType === "person") &&
                     (this.lastSelectedId === responseGroups[
                         i
-                        ].Members[0].Member[a].UID[0]._content)) {
+                        ].Members.Member[a].UID._content)) {
 
                     lastSelectedIdValid = true;
 
                 }
 
                 currentData.members.push({
-                    uid: responseGroups[i].Members[0].Member[a].UID[0]._content,
+                    uid: responseGroups[i].Members.Member[a].UID._content,
                     name:
-                        responseGroups[i].Members[0].Member[a].Name[0]._content
+                        responseGroups[i].Members.Member[a].Name._content
                 });
 
             }
 
             if ((this.lastSelectedType === "group") &&
-                (this.lastSelectedId === responseGroups[i].ID[0]._content)
+                (this.lastSelectedId === responseGroups[i].ID._content)
                 ) {
 
                 lastSelectedIdValid = true;
 
             }
 
-            this.groups[responseGroups[i].ID[0]._content] = currentData;
+            this.groups[responseGroups[i].ID._content] = currentData;
 
         }
 
@@ -837,8 +840,8 @@ de_dieploegers_groupcalHandlerObject.prototype.handleGetTimespan =
 
         getTimespan = response.getResponse().GetTimespanResponse;
 
-        this.startDate = new Date(getTimespan.start[0]._content * 1000);
-        this.endDate = new Date(getTimespan.end[0]._content * 1000);
+        this.startDate = new Date(getTimespan.start._content * 1000);
+        this.endDate = new Date(getTimespan.end._content * 1000);
 
     };
 
@@ -949,7 +952,7 @@ de_dieploegers_groupcalHandlerObject.prototype.init =
         this.startDate = null;
         this.endDate = null;
 
-        soapDoc = AjxSoapDoc.create("GetTimespan", "urn:groupCal");
+        soapDoc = AjxSoapDoc.create("GetTimespanRequest", "urn:groupCal");
 
         callback = new AjxCallback(
             this,
@@ -968,6 +971,18 @@ de_dieploegers_groupcalHandlerObject.prototype.init =
         // Set current view date to now
 
         this.currentViewDate = new Date();
+
+        // Create autocomplete handler
+
+        this.autocompleteHandler = new de_dieploegers_groupcalAutocomplete();
+
+        this.autocomplete = new ZmAutocompleteListView({
+            dataClass: this.autocompleteHandler,
+            compCallback: new AjxCallback(
+                this,
+                this.handleAutocomplete
+            )
+        });
 
     };
 
@@ -1080,7 +1095,7 @@ de_dieploegers_groupcalHandlerObject.prototype.rebuildCalendar =
                     ) {
 
                     apptNode = this.appointments[uid].appointments[i];
-                    instNode = apptNode.inst[0];
+                    instNode = apptNode.inst;
 
                     tmpAppt = ZmAppt.createFromDom(
                         apptNode,

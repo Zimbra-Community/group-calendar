@@ -84,9 +84,9 @@ Needs jsch-libraries for the deployment task.
 
         <!-- Flush caches -->
 
-        <sshexec host="${deploy.host}" username="${deploy.user}"
+        <sshexec host="${dev.deploy.host}" username="${dev.deploy.user}"
                  command="zmprov fc uistrings" failonerror="false"
-                 keyfile="${deploy.keyfile}"/>
+                 keyfile="${dev.deploy.keyfile}"/>
 
     </target>
 

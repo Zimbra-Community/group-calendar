@@ -7,6 +7,7 @@ for the group calendar zimlet.
 
 """
 import calendar
+import json
 import logging
 from optparse import OptionParser
 import sqlite3
@@ -244,7 +245,8 @@ if __name__ == '__main__':
                   "ACCOUNT TEXT NOT NULL,"
                   "START_TIMESTAMP NUMERIC,"
                   "END_TIMESTAMP NUMERIC,"
-                  "APPTDATA TEXT)")
+                  "APPTDATA TEXT,"
+                  "PRIMARY KEY(ID, ACCOUNT))")
 
     # Remove old values
 
@@ -465,14 +467,6 @@ if __name__ == '__main__':
                     if end_timestamp > expand_end_epoch:
                         end_timestamp = expand_end_epoch
 
-                    # Convert the appt data into XML
-
-                    appt_doc = Document()
-
-                    appt_node = appt_doc.createElement("appt")
-
-                    dict_to_dom(appt_node, temp_appt)
-
                     # Add the appointment
 
                     logging.debug("Adding appointment into database")
@@ -488,8 +482,7 @@ if __name__ == '__main__':
                             member,
                             start_timestamp / 1000,
                             end_timestamp / 1000,
-                            appt_node.toxml()
-
+                            json.dumps(temp_appt)
                         )
                     )
 
