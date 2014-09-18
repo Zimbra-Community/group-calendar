@@ -21,10 +21,6 @@ Needs jsch-libraries for the deployment task.
 
         <property file="build_dist.properties" />
 
-        <!-- Filename for zimlet -->
-
-        <property name="build.zipfile" value="${dist.name}.zip"/>
-
         <patternset id="zimlet.sources"
                     includes="*.css, *.xml, *.js, *.properties"
                     excludes="build.*" />
