@@ -12,15 +12,19 @@ import logging
 from optparse import OptionParser
 import sqlite3
 import datetime
-from xml.dom.minidom import Document
 from pythonzimbra.communication import Communication
 from pythonzimbra.tools import auth
 from pythonzimbra.tools.dict import get_value
-from pythonzimbra.tools.xmlserializer import dict_to_dom
+import time
 
 SEARCH_LIMIT = 100
 
 """ How many results to fetch in one SearchRequest """
+
+WAIT_AFTER_SEARCH = 0.5
+
+""" How many seconds (may be a fracture) to wait between to search requests (
+for DoS-Filter mitigation) """
 
 if __name__ == '__main__':
 
@@ -486,6 +490,10 @@ if __name__ == '__main__':
                         )
                     )
 
+            # Wait some time to mitigate the DoS-Filter
+
+            time.sleep(WAIT_AFTER_SEARCH)
+
             if appt_response.get_response()["SearchResponse"]["more"] == 1:
 
                 # We have more pages. Rerun the search
@@ -494,6 +502,8 @@ if __name__ == '__main__':
 
                 search_params["offset"] = current_offset
                 appt_request.clean()
+
+                appt_request.set_auth_token(user_token)
                 appt_request.add_request(
                     "SearchRequest",
                     search_params,
