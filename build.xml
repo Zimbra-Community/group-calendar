@@ -21,15 +21,17 @@ Buildfile for de_dieploegers_groupcal to create release bundles
         <!-- Read build properties from serverextension -->
 
         <property file="serverextension/build.properties"
-                  prefix="serverextension" />
+                  prefix="serverextension" prefixvalues="true"/>
 
         <property file="serverextension/build_dist.properties"
-                  prefix="serverextension" />
+                  prefix="serverextension" prefixvalues="true"/>
 
         <!-- Read build properties from zimlet -->
 
-        <property file="zimlet/build.properties" prefix="zimlet" />
-        <property file="zimlet/build_dist.properties" prefix="zimlet" />
+        <property file="zimlet/build.properties" prefix="zimlet"
+                  prefixvalues="true"/>
+        <property file="zimlet/build_dist.properties" prefix="zimlet"
+                  prefixvalues="true"/>
 
         <!-- Build the server extension -->
 
@@ -43,12 +45,11 @@ Buildfile for de_dieploegers_groupcal to create release bundles
 
         <!-- Create the release bundle -->
 
-        <zip destfile="${build.dir}/${build.filename}">
-            <fileset dir="serverextension/${serverextension.dist.dir}"
-                     file="${serverextension.dist.jarfile}"/>
-            <fileset dir="agent" file="groupcal.py"/>
-            <fileset dir="zimlet" file="${zimlet.build.zipfile}"/>
-            <fileset dir="." file="README.md"/>
+        <zip destfile="${build.dir}/${build.filename}" filesonly="true">
+            <fileset file="serverextension/${serverextension.dist.dir}/${serverextension.dist.jarfile}"/>
+            <fileset file="agent/groupcal.py"/>
+            <fileset file="zimlet/${zimlet.build.zipfile}"/>
+            <fileset file="README.md"/>
         </zip>
 
     </target>
