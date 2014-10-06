@@ -49,6 +49,7 @@ Buildfile for de_dieploegers_groupcal to create release bundles
             <fileset file="serverextension/${serverextension.dist.dir}/${serverextension.dist.jarfile}"/>
             <fileset file="agent/groupcal.py"/>
             <fileset file="zimlet/${zimlet.build.zipfile}"/>
+            <fileset file="contribs/sqlite-jdbc-3.7.2.jar"/>
             <fileset file="README.md"/>
         </zip>
 

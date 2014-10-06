@@ -41,7 +41,9 @@ on a server with [Python] [python] and the [Zimbra python
 libraries] [python-zimbra]
 * The Zimbra server extension. On your zimbra server, create a directory 
 /opt/zimbra/lib/ext/de_dieploegers_groupcal and place the file 
-de_dieplogers_groupcal.jar there
+de_dieplogers_groupcal.jar there. 
+* The Sqlite-JDBC-class. Move the file "sqlite-jdbc-3.7.2.jar" to 
+/opt/zimbra/mailboxd/lib/ext 
 * The zimlet. This can be simply installed using the ZCS administration 
 console or the zmzimletctl script
 
