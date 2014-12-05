@@ -239,30 +239,23 @@ if __name__ == '__main__':
 
     tables = c.fetchall()
 
-    if len(tables) == 0:
+    if len(tables) != 0:
 
-        # No. Create appt cache table
+        # There already is a table. We don't sync here, so simply drop the
+        # table. It is recreated afterwards
 
-        c.execute("CREATE TABLE APPTCACHE "
-                  "(ID TEXT NOT NULL, "
-                  "RECURRENCEID TEXT NOT NULL,"
-                  "ACCOUNT TEXT NOT NULL,"
-                  "START_TIMESTAMP NUMERIC,"
-                  "END_TIMESTAMP NUMERIC,"
-                  "APPTDATA TEXT,"
-                  "PRIMARY KEY(ID, ACCOUNT))")
+        c.execute("DROP TABLE APPTCACHE")
 
-    # Remove old values
+    # No. Create appt cache table
 
-    purge_date = datetime.datetime.now()
-    purge_date = purge_date - datetime.timedelta(options.start)
-
-    purge_date_epoch = calendar.timegm(purge_date.utctimetuple())
-
-    c.execute(
-        "DELETE FROM APPTCACHE WHERE START_TIMESTAMP <= ?",
-        (purge_date_epoch,)
-    )
+    c.execute("CREATE TABLE APPTCACHE "
+              "(ID TEXT NOT NULL, "
+              "RECURRENCEID TEXT NOT NULL,"
+              "ACCOUNT TEXT NOT NULL,"
+              "START_TIMESTAMP NUMERIC,"
+              "END_TIMESTAMP NUMERIC,"
+              "APPTDATA TEXT,"
+              "PRIMARY KEY(ID, ACCOUNT))")
 
     preauth_cache = {}
 
