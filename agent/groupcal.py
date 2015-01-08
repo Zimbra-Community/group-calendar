@@ -214,7 +214,7 @@ if __name__ == '__main__':
             exit(1)
 
         for member in distlist_response.get_response()[
-            "GetDistributionListResponse"]["dl"]["dlm"]:
+                "GetDistributionListResponse"]["dl"]["dlm"]:
 
             if not member["_content"] in fetch_members:
 
@@ -301,11 +301,11 @@ if __name__ == '__main__':
 
         (local_part, domain_part) = member.split("@")
 
-        if not domain_part in preauth_cache:
+        if domain_part not in preauth_cache:
 
             # Preauthkey for domain hasn't been fetched. Do it.
 
-            logging.debug("Fetching preauth key for domain %s" % (domain_part))
+            logging.debug("Fetching preauth key for domain %s" % domain_part)
 
             get_pak_request = comm.gen_request(token=token)
 
@@ -375,8 +375,8 @@ if __name__ == '__main__':
         search_params = {
             "query": "in:/Calendar",
             "types": "appointment",
-            "calExpandInstStart" : expand_start_epoch,
-            "calExpandInstEnd" : expand_end_epoch,
+            "calExpandInstStart": expand_start_epoch,
+            "calExpandInstEnd": expand_end_epoch,
             "limit": SEARCH_LIMIT
         }
 
@@ -401,7 +401,7 @@ if __name__ == '__main__':
 
                 exit(1)
 
-            if not "appt" in appt_response.get_response()["SearchResponse"]:
+            if "appt" not in appt_response.get_response()["SearchResponse"]:
 
                 # No appointments found. Skip
 
