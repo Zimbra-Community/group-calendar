@@ -234,19 +234,12 @@ if __name__ == '__main__':
 
     c = db.cursor()
 
-    c.execute("SELECT name FROM sqlite_master "
-              "WHERE type='table' AND name='APPTCACHE'")
+    # We don't sync here, so simply drop the
+    # table. It is recreated afterwards
 
-    tables = c.fetchall()
+    c.execute("DROP TABLE IF EXISTS APPTCACHE")
 
-    if len(tables) != 0:
-
-        # There already is a table. We don't sync here, so simply drop the
-        # table. It is recreated afterwards
-
-        c.execute("DROP TABLE APPTCACHE")
-
-    # No. Create appt cache table
+    # Create appt cache table
 
     c.execute("CREATE TABLE APPTCACHE "
               "(ID TEXT NOT NULL, "
