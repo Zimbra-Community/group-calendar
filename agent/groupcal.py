@@ -435,6 +435,8 @@ if __name__ == '__main__':
 
                     insts = [insts]
 
+                inst_id = 0
+
                 for inst in insts:
 
                     # Create a copy of the appointment and remove all other
@@ -467,7 +469,7 @@ if __name__ == '__main__':
                         "END_TIMESTAMP, APPTDATA"
                         ") VALUES (?,?,?,?,?,?)",
                         (
-                            temp_appt["id"],
+                            "%s%d" % (temp_appt["id"], inst_id),
                             inst["ridZ"],
                             member,
                             start_timestamp / 1000,
@@ -476,11 +478,13 @@ if __name__ == '__main__':
                         )
                     )
 
+                    inst_id += 1
+
             # Wait some time to mitigate the DoS-Filter
 
             time.sleep(WAIT_AFTER_SEARCH)
 
-            if appt_response.get_response()["SearchResponse"]["more"] == 1:
+            if appt_response.get_response()["SearchResponse"]["more"]:
 
                 # We have more pages. Rerun the search
 
