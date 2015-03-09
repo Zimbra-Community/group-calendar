@@ -999,6 +999,7 @@ de_dieploegers_groupcalHandlerObject.prototype.rebuildCalendar =
             currentLegend,
             funcIsReadOnly,
             i,
+            j,
             instNode,
             outputSize,
             tmpAppt,
@@ -1068,38 +1069,43 @@ de_dieploegers_groupcalHandlerObject.prototype.rebuildCalendar =
 
             if (this.appointments.hasOwnProperty(uid)) {
 
-                appCtxt.cacheSet("groupcal_cal_" + uid, {
+                appCtxt.cacheSet(
+                    "groupcal_cal_" + uid, {
 
-                    rgb: this.appointments[uid].color,
-                    isReadOnly: funcIsReadOnly,
-                    link: true
+                        rgb: this.appointments[uid].color,
+                        isReadOnly: funcIsReadOnly,
+                        link: true
 
-                });
+                    }
+                );
 
                 // Add information to the legend
 
-                currentLegend = new DwtMenuItem({
+                currentLegend = new DwtMenuItem(
+                    {
 
-                    parent: this.legendMenu
+                        parent: this.legendMenu
 
-                });
+                    }
+                );
 
                 currentLegend.setText(this.appointments[uid].description);
                 currentLegend.setTextBackground(this.appointments[uid].color);
 
                 // Now, fill the apptList as a data base for the calendar view
 
-                for (i = 0;
-                     i < this.appointments[uid].appointments.length;
-                     i = i + 1
-                    ) {
+                for (
+                    i = 0;
+                    i < this.appointments[uid].appointments.length;
+                    i = i + 1
+                ) {
 
                     apptNode = this.appointments[uid].appointments[i];
                     instNode = apptNode.inst;
 
                     tmpAppt = ZmAppt.createFromDom(
                         apptNode,
-                        { list: apptList },
+                        {list: apptList},
                         instNode
                     );
 
@@ -1111,11 +1117,37 @@ de_dieploegers_groupcalHandlerObject.prototype.rebuildCalendar =
                     // We have to fake some things
 
                     tmpAppt._orig = tmpAppt;
-                    tmpAppt._orig.updateParticipantStatus = function () {
+                    tmpAppt._orig.updateParticipantStatus = function ()
+                    {
                         return true;
                     };
 
-                    apptList.add(tmpAppt);
+                    if (!tmpAppt.isAllDayEvent()) {
+
+                        // Fan out multi-day events
+
+                        var result = new AjxVector();
+
+                        ZmApptList._fanout(
+                            tmpAppt,
+                            result,
+                            this.startDate.getTime(),
+                            this.endDate.getTime(),
+                            false
+                        );
+
+                        for (j = 0; j < result.size(); j = j + 1) {
+
+                            apptList.add(result.get(j));
+
+                        }
+
+                    } else {
+
+                        apptList.add(tmpAppt);
+
+                    }
+
 
                 }
 
@@ -1126,6 +1158,10 @@ de_dieploegers_groupcalHandlerObject.prototype.rebuildCalendar =
         // Force refresh of calendar view
 
         this.calendarView.set(apptList, true);
+
+        // Refresh positioning of appts
+
+        this.calendarView._layoutAppts();
 
         // Focus the search field
 
