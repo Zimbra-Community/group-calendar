@@ -18,6 +18,9 @@ This extension allows a central managment of group calendars. The main
 calendars of several users can be grouped together using a distribution list.
  Permissions to access this group calendar are handled using a corresponding 
  distribution list.
+
+![Group Calendar Screenshot](https://raw.githubusercontent.com/Zimbra-Community/zimbra.de_dieploegers_groupcal/master/groupcal.png "Group Calendar Screenshot")
+
  
 The extension consists of four parts:
 
