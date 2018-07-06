@@ -31,10 +31,12 @@ The extension consists of four parts:
 * [Zimbra Collaboration Server] [zimbra] versions 8.5 and up
 * [Python] [python] versions 2.7 and up (currently not Python 3-compatible!)
 * [Zimbra python libraries] [python-zimbra] versions 1.1-rc4 and up
+* Your domain needs a preauth key to be configured, run as Zimbra: `zmprov generateDomainPreAuthKey yourdomainhere`
+* Port 443 needs to be accessible to Python (groupcal.py) you can run curl https://yourmailboxserverhere from the server where groupcal.py runs to test. 
 
 ## Installation
 
-For CentOS 7 only, you can run the automated installer
+For Single Server CentOS 7 only, you can run the automated installer:
 
     wget https://raw.githubusercontent.com/Zimbra-Community/zimbra.de_dieploegers_groupcal/master/groupcal-installer-centos7.sh -O /tmp/groupcal-installer-centos7.sh
     chmod +rx /tmp/groupcal-installer-centos7.sh
