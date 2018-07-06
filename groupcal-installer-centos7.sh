@@ -93,7 +93,7 @@ echo "Creating admin user for sync"
 GROUPCAL_PWD=$(< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-10};echo;)
 GROUPCAL_USER=groupcaladmin@$DOMAIN
 set +e
-su - zimbra -c "/opt/zimbra/bin/zmprov ca $GROUPCAL_USER $GROUPCAL_PWD zimbraIsAdminAccount TRUE"
+su - zimbra -c "/opt/zimbra/bin/zmprov ca $GROUPCAL_USER $GROUPCAL_PWD cn 'Group Calendar Admin' displayName 'Group Calendar Admin' givenName 'Group Calendar Admin' zimbraIsAdminAccount TRUE"
 set -e
 su - zimbra -c "/opt/zimbra/bin/zmprov sp $GROUPCAL_USER $GROUPCAL_PWD"
 sed -i 's/USERNAME/'"$GROUPCAL_USER"'/g' /usr/local/sbin/groupcal-run.sh
@@ -104,6 +104,8 @@ set +e
 su zimbra -c "/opt/zimbra/bin/zmprov cdl gcal_@$DOMAIN"
 su zimbra -c "/opt/zimbra/bin/zmprov cdl sec_gcal_@$DOMAIN"
 set -e
+su zimbra -c "/opt/zimbra/bin/zmprov mdl gcal_@$DOMAIN displayName 'Group Calendar'"
+su zimbra -c "/opt/zimbra/bin/zmprov mdl sec_gcal_@$DOMAIN displayName 'Security Group Calendar'"
 su zimbra -c "/opt/zimbra/bin/zmprov adlm gcal_@$DOMAIN $GROUPCAL_USER"
 su zimbra -c "/opt/zimbra/bin/zmprov adlm sec_gcal_@$DOMAIN $GROUPCAL_USER"
 
