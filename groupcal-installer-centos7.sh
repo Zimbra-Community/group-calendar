@@ -75,6 +75,10 @@ rm -Rf /opt/zimbra/lib/ext/de_dieploegers_groupcal
 mkdir -p /opt/zimbra/lib/ext/de_dieploegers_groupcal
 cp -v *.jar /opt/zimbra/lib/ext/de_dieploegers_groupcal/
 
+echo "Setting localconfig"
+su zimbra -c '/opt/zimbra/bin/zmlocalconfig -e groupcal_jdbc_driver="org.sqlite.JDBC"'
+su zimbra -c '/opt/zimbra/bin/zmlocalconfig -e groupcal_jdbc_url="jdbc:sqlite:/opt/zimbra/data/caching.db"'
+
 echo "Installing Zimlet"
 su - zimbra -c "zmzimletctl -l deploy $TMPFOLDER/de_dieploegers_groupcal.zip"
 
