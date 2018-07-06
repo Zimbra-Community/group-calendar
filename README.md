@@ -36,9 +36,9 @@ The extension consists of four parts:
 
 For CentOS 7 only, you can run the automated installer
 
-      wget https://raw.githubusercontent.com/Zimbra-Community/zimbra.de_dieploegers_groupcal/master/groupcal-installer-centos7.sh -O /tmp/groupcal-installer-centos7.sh
-      chmod +rx /tmp/groupcal-installer-centos7.sh
-      /tmp/groupcal-installer-centos7.sh
+    wget https://raw.githubusercontent.com/Zimbra-Community/zimbra.de_dieploegers_groupcal/master/groupcal-installer-centos7.sh -O /tmp/groupcal-installer-centos7.sh
+    chmod +rx /tmp/groupcal-installer-centos7.sh
+    /tmp/groupcal-installer-centos7.sh
    
 
 The release bundle contains:
