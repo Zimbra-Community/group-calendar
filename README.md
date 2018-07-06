@@ -75,6 +75,11 @@ jdbc:sqlite:/opt/zimbra/data/caching.db)
 * groupcal_jdbc_username: JDBC user name, currently not needed
 * groupcal_jdbc_password: JDBC password, currently not needed
 
+To set the localconfig run:
+
+    su zimbra -c '/opt/zimbra/bin/zmlocalconfig -e groupcal_jdbc_driver="org.sqlite.JDBC"'
+    su zimbra -c '/opt/zimbra/bin/zmlocalconfig -e groupcal_jdbc_url="jdbc:sqlite:/opt/zimbra/data/caching.db"'
+
 ## Agent startup
 
 The agent is run periodically and manages the caching database (removes 
