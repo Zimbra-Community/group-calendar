@@ -14,7 +14,7 @@ the wrong users
 * Things like the sidebar zimlet get cluttered with unrelated appointments
 * It is very cumbersome to create the appropriate shares for all team members
 
-This extension allows a central managment of group calendars. The main 
+This extension allows a central management of group calendars. The main 
 calendars of several users can be grouped together using a distribution list.
  Permissions to access this group calendar are handled using a corresponding 
  distribution list.
