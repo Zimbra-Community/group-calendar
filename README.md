@@ -31,7 +31,7 @@ The extension consists of four parts:
 
 ## Requirements
 
-* [Zimbra Collaboration Server] [zimbra] versions 8.5 and up
+* [Zimbra Collaboration Server] [zimbra] versions 8.7 and up
 * [Python] [python] versions 2.7 and up (currently not Python 3-compatible!)
 * [Zimbra python libraries] [python-zimbra] versions 1.1-rc4 and up
 * Your domain needs a preauth key to be configured, run as Zimbra: `zmprov generateDomainPreAuthKey yourdomainhere`
