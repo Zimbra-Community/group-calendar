@@ -1,9 +1,5 @@
-# Not recommended for new installs
-
-This Zimlet needs some work to stay functional, it needs at least support for MariaDB and Python 3. While I have had talks with a lot of people about funding these development, to date, I have not found enough funding to continue and maintain this Zimlet.
-
-This means that till such funding arrives, I do not recommed this Zimlet for new installs, als the repo will be made unavailable as soons as Python 2 support has ended.
-
+# Update coming soon
+A new version is coming soon
 
 # Aggregated calendars for Zimbra Collaboration Server
 
