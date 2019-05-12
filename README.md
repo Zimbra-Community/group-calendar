@@ -25,83 +25,17 @@ calendars of several users can be grouped together using a distribution list.
 
 ![Group Calendar Screenshot](https://raw.githubusercontent.com/Zimbra-Community/zimbra.de_dieploegers_groupcal/master/groupcal.png "Group Calendar Screenshot")
 
- 
-The extension consists of four parts:
-
-* A caching database holding the appointment data of all group calendars
-* A python agent managing that database
-* A zimlet displaying that data
-* A soap extension giving the zimlet access to the data
-
-## Requirements
-
-* [Zimbra Collaboration Server] [zimbra] versions 8.7 and up
-* [Python] [python] versions 2.7 and up (currently not Python 3-compatible!)
-* [Zimbra python libraries] [python-zimbra] versions 1.1-rc4 and up
-* Your domain needs a preauth key to be configured, run as Zimbra: `zmprov generateDomainPreAuthKey yourdomainhere`
-* Port 443 needs to be accessible to Python (groupcal.py) you can run curl https://yourmailboxserverhere from the server where groupcal.py runs to test. 
-
 ## Installation
 
-For Single Server CentOS 7 only, you can run the automated installer:
+Automated installer for CentOS 7 and Ubuntu, run it on all your mailbox servers.
 
-    wget https://raw.githubusercontent.com/Zimbra-Community/zimbra.de_dieploegers_groupcal/master/groupcal-installer-centos7.sh -O /tmp/groupcal-installer-centos7.sh
-    chmod +rx /tmp/groupcal-installer-centos7.sh
-    /tmp/groupcal-installer-centos7.sh
-   
-
-The release bundle contains:
-
-* The Python agent (groupcal.py). Needs to be deployed to a local directory 
-on a server with [Python] [python] and the [Zimbra python 
-libraries] [python-zimbra]
-* The Zimbra server extension. On your zimbra server, create a directory 
-/opt/zimbra/lib/ext/de_dieploegers_groupcal and place the file 
-de_dieplogers_groupcal.jar there. 
-* The Sqlite-JDBC-class. Move the file "sqlite-jdbc-3.7.2.jar" to 
-/opt/zimbra/mailboxd/lib/ext 
-* The zimlet. This can be simply installed using the ZCS administration 
-console or the zmzimletctl script
-
-## Configuration
-
-work in progress
-
-## Agent startup
-
-The agent is run periodically and manages the caching database (removes 
-unneeded data, fetches new data).
-
-It needs four parameters to work:
-
-    python groupcal.py -D <work in progress> <Hostname of one 
-    zimbra mailbox server> <administrative username> <password>
-
-There are other parameters available, which are described in the command 
-help, that is available using the parameter --help.
-
-## Usage
-
-The group calendars are defined using the membership in specific groups.
-
-To create a group calendar out of appointments of a set of users, 
-create a new distribution list called gcal_<name of group calendar>@<domain> 
-and put the users into this distribution list.
-
-To make this group calendar available to specific users, 
-create another distribution list called sec_gcal_<name of group 
-calendar>@<domain> and put that users there.
-
-Usually, you put the team members into the gcal_-Group and the team manager 
-into the sec_gcal_-Group. This way, the team manager has access all the 
-calendars of the team members.
-
-(The prefixes are configureable using the 
-localconfig-parameters "groupcal_gcal_prefix" and "groupcal_sec_prefix")
+    wget https://github.com/Zimbra-Community/group-calendar/blob/master/groupcal-installer.sh -O /tmp/groupcal-installer.sh
+    chmod +rx /tmp/groupcal-installer.sh
+    /tmp/groupcal-installer.sh
 
 ## Private appointments
 
-Private appointments are filtered out by the agent script, 
+Private appointments are ignored by Group Calendar, 
 so you don't have to worry about private appointments reaching unauthorized 
 eyes.
 
