@@ -165,7 +165,7 @@ echo "Installing Bash Script runner for use with cron"
 source /opt/zimbra/bin/zmshutil
 zmsetvars
 wget https://raw.githubusercontent.com/Zimbra-Community/group-calendar/master/bin/groupcal-run.sh -O /opt/groupcal/groupcal-run.sh
-chmod +rx /usr/local/sbin/groupcal-run.sh
+chmod +rx /opt/groupcal/groupcal-run.sh
 sed -i 's/USERNAME/'"$GROUPCAL_USER"'/g' /opt/groupcal/groupcal-run.sh
 sed -i 's/PASSWORD/'"$GROUPCAL_PWD"'/g' /opt/groupcal/groupcal-run.sh
 sed -i 's/somepassword/'"$DB_PWD"'/g' /opt/groupcal/groupcal-run.sh
