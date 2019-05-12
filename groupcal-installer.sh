@@ -169,7 +169,7 @@ chmod +rx /opt/groupcal/groupcal-run.sh
 sed -i 's/USERNAME/'"$GROUPCAL_USER"'/g' /opt/groupcal/groupcal-run.sh
 sed -i 's/PASSWORD/'"$GROUPCAL_PWD"'/g' /opt/groupcal/groupcal-run.sh
 sed -i 's/somepassword/'"$DB_PWD"'/g' /opt/groupcal/groupcal-run.sh
-sed -i '/zimbraserver/'"$zimbra_server_hostname"'/g /opt/groupcal/groupcal-run.sh
+sed -i 's/zimbraserver/'"$zimbra_server_hostname"'/g' /opt/groupcal/groupcal-run.sh
 
 echo "Setting up distribution lists"
 set +e
