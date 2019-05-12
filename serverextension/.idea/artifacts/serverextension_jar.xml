@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="serverextension:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/serverextension_jar</output-path>
+    <root id="archive" name="serverextension.jar">
+      <element id="module-output" name="serverextension" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>

@@ -29,7 +29,7 @@ calendars of several users can be grouped together using a distribution list.
 
 Automated installer for CentOS 7 and Ubuntu, run it on all your mailbox servers.
 
-    wget https://github.com/Zimbra-Community/group-calendar/blob/master/groupcal-installer.sh -O /tmp/groupcal-installer.sh
+    wget https://raw.githubusercontent.com/Zimbra-Community/group-calendar/master/groupcal-installer.sh -O /tmp/groupcal-installer.sh
     chmod +rx /tmp/groupcal-installer.sh
     /tmp/groupcal-installer.sh
 
