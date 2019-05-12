@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2014-2018  Barry de Graaff
+# Copyright (C) 2014-2019  Barry de Graaff
 #
 # Bugs and feedback: https://github.com/Zimbra-Community/zimbra.de_dieploegers_groupcal/issues
 #
@@ -17,17 +17,5 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see http://www.gnu.org/licenses/.
 
-WHO=`whoami`
-if [ $WHO != "zimbra" ]
-then
-echo
-echo "Execute this scipt as user zimbra (\"su - zimbra\")"
-echo
-exit 1
-fi
-
-source ~/bin/zmshutil
-zmsetvars
-
-/usr/bin/python2 /usr/local/sbin/groupcal.py -d --dbpassword somepassword $zimbra_server_hostname groupcaladmin@zimbradev.barrydegraaff.tk A4O5jxvbIC
+/usr/bin/python3.6 /etc/groupcal/groupcal.py -d --dbpassword somepassword zimbraserver USERNAME PASSWORD
 

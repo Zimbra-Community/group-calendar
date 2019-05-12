@@ -14,4 +14,5 @@
       sleep 1
     done
 mysql -u root -e "create database if not exists groupcal_db;" || true
+mysql -u root < /opt/groupcal/create-user.sql || true
 mysql -u root < /initsql.sql || true
