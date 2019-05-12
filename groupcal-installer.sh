@@ -184,7 +184,17 @@ su zimbra -c "/opt/zimbra/bin/zmprov adlm sec_gcal_@$DOMAIN $GROUPCAL_USER"
 ls -hal $TMPFOLDER
 rm -Rf $TMPFOLDER
 
+echo "Running initial sync"
+/usr/bin/docker exec groupcal /opt/groupcal/groupcal-run.sh
+
+set +e
+su zimbra -c "zmprov generateDomainPreAuthKey $DOMAIN"
+set -e
 su zimbra -c "/opt/zimbra/bin/zmmailboxdctl restart"
+
+echo "Setting up cron in /etc/cron.hourly/groupcal"
+wget https://raw.githubusercontent.com/Zimbra-Community/group-calendar/master/bin/groupcal-cron -O /etc/cron.hourly/groupcal
+chmod +rx /etc/cron.hourly/groupcal
 
 echo "--------------------------------------------------------------------------------------------------------------
 Groupcal installed successful.
@@ -195,13 +205,5 @@ sec_gcal_@$DOMAIN
 
 Check the readme: https://github.com/Zimbra-Community/group-calendar
 
-
-You also need to have a pre-auth enabled domain, if you don't use pre authentication yet, run
-zmprov generateDomainPreAuthKey $DOMAIN
-More info on pre-auth: https://wiki.zimbra.com/wiki/Preauth
-
-In addition the python script expects to connect to port 443 on your domain.
-
-then run crontab -e and append something like this for the Zimbra user:
-10,20,30,40,50,0 * * * * /usr/local/sbin/groupcal-run.sh
+The Docker container needs to be able to port 443 on $zimbra_server_hostname.
 "
