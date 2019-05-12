@@ -10,7 +10,7 @@ import calendar
 import json
 import logging
 from optparse import OptionParser
-import sqlite3
+import mysql.connector as mariadb
 import datetime
 from pythonzimbra.communication import Communication
 from pythonzimbra.tools import auth
@@ -84,19 +84,50 @@ if __name__ == '__main__':
     )
 
     parser.add_option(
-        "-D",
-        "--database",
+        "--dbuser",
         action="store",
-        dest="database",
-        help="Name of caching database"
+        dest="dbuser",
+        help="MariaDB database user",
+        default="ad-groupcal_db"
     )
+
+    parser.add_option(
+        "--dbpassword",
+        action="store",
+        dest="dbpassword",
+        help="MariaDB database password"
+    )
+
+    parser.add_option(
+        "--dbname",
+        action="store",
+        dest="dbname",
+        help="Name of caching database",
+        default="groupcal_db"
+    )
+    
+    parser.add_option(
+        "--dbport",
+        action="store",
+        dest="dbport",
+        help="MariaDB port",
+        default="3306"
+    )
+    
+    parser.add_option(
+        "--dbhost",
+        action="store",
+        dest="dbhost",
+        help="MariaDB server host",
+        default="127.0.0.1"
+    )        
 
     (options, args) = parser.parse_args()
 
     # Sanity Check
 
-    if options.database is None:
-        parser.error("Please specify the database name")
+    if options.dbpassword is None:
+        parser.error("Please specify the database password")
 
     if len(args) < 3:
         parser.error("Invalid number of arguments")
@@ -229,26 +260,13 @@ if __name__ == '__main__':
         exit(0)
 
     # Is the database ready?
-
-    db = sqlite3.connect(options.database)
-
+    db = mariadb.connect(user=options.dbuser, password=options.dbpassword, database=options.dbname, port=options.dbport, host=options.dbhost)
     c = db.cursor()
 
     # We don't sync here, so simply drop the
     # table. It is recreated afterwards
 
-    c.execute("DROP TABLE IF EXISTS APPTCACHE")
-
-    # Create appt cache table
-
-    c.execute("CREATE TABLE APPTCACHE "
-              "(ID TEXT NOT NULL, "
-              "RECURRENCEID TEXT NOT NULL,"
-              "ACCOUNT TEXT NOT NULL,"
-              "START_TIMESTAMP NUMERIC,"
-              "END_TIMESTAMP NUMERIC,"
-              "APPTDATA TEXT,"
-              "PRIMARY KEY(ID, ACCOUNT))")
+    c.execute("TRUNCATE TABLE APPTCACHE")
 
     preauth_cache = {}
 
@@ -462,12 +480,18 @@ if __name__ == '__main__':
                     # Add the appointment
 
                     logging.debug("Adding appointment into database")
-
+                    logging.debug("%s%d" % (temp_appt["id"], inst_id))
+                    logging.debug(inst["ridZ"])
+                    logging.debug(member)
+                    logging.debug(start_timestamp / 1000)
+                    logging.debug(end_timestamp / 1000)
+                    logging.debug(json.dumps(temp_appt))
+                    
                     c.execute(
-                        "insert or replace into APPTCACHE ("
+                        "replace into APPTCACHE ("
                         "ID, RECURRENCEID, ACCOUNT, START_TIMESTAMP, "
                         "END_TIMESTAMP, APPTDATA"
-                        ") VALUES (?,?,?,?,?,?)",
+                        ") VALUES (%s,%s,%s,%s,%s,%s)",
                         (
                             "%s%d" % (temp_appt["id"], inst_id),
                             inst["ridZ"],

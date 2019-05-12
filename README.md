@@ -1,5 +1,6 @@
-# Update coming soon
-A new version is coming soon
+# Work in progress DO NOT INSTALL
+
+
 
 # Aggregated calendars for Zimbra Collaboration Server
 
@@ -64,27 +65,7 @@ console or the zmzimletctl script
 
 ## Configuration
 
-The Soap server extension needs special configuration strings. This is done 
-using the Zimbra localconfig environment. Because of this, 
-this configuration has to be done on every mailbox server in a multi-server 
-environment.
-
-As a default, the server is using a SQLite3-database at 
-/opt/zimbra/data/caching.db.
-
-If you want to customize that, the following keys can be set:
-
-* groupcal_jdbc_driver: JDBC-Database driver Currently only org.sqlite.JDBC 
-(sqlite3-driver) is supported
-* groupcal_jdbc_url: JDBC-URL to the database. (i.e. 
-jdbc:sqlite:/opt/zimbra/data/caching.db)
-* groupcal_jdbc_username: JDBC user name, currently not needed
-* groupcal_jdbc_password: JDBC password, currently not needed
-
-To set the localconfig run:
-
-    su zimbra -c '/opt/zimbra/bin/zmlocalconfig -e groupcal_jdbc_driver="org.sqlite.JDBC"'
-    su zimbra -c '/opt/zimbra/bin/zmlocalconfig -e groupcal_jdbc_url="jdbc:sqlite:/opt/zimbra/data/caching.db"'
+work in progress
 
 ## Agent startup
 
@@ -93,7 +74,7 @@ unneeded data, fetches new data).
 
 It needs four parameters to work:
 
-    python groupcal.py -D <path to the caching database> <Hostname of one 
+    python groupcal.py -D <work in progress> <Hostname of one 
     zimbra mailbox server> <administrative username> <password>
 
 There are other parameters available, which are described in the command 

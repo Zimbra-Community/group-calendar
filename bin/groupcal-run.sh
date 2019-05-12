@@ -29,5 +29,5 @@ fi
 source ~/bin/zmshutil
 zmsetvars
 
-/usr/bin/python2 /usr/local/sbin/groupcal.py -D /opt/zimbra/data/caching.db $zimbra_server_hostname USERNAME PASSWORD
+/usr/bin/python2 /usr/local/sbin/groupcal.py -d --dbpassword somepassword $zimbra_server_hostname groupcaladmin@zimbradev.barrydegraaff.tk A4O5jxvbIC
 

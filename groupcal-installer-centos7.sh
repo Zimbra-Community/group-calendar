@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2016-2018  Barry de Graaff
+# Copyright (C) 2016-2019  Barry de Graaff
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -62,24 +62,19 @@ cd $TMPFOLDER
 echo "Installing pip and python-zimbra"
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python get-pip.py
-pip install python-zimbra
+pip install python-zimbra mysql-connector-python 
 
 echo "Fetching the latest Groupcal release"
-
-wget https://github.com/Zimbra-Community/zimbra.de_dieploegers_groupcal/releases/download/v1.0-rc8/bundle-v1.0-rc8.zip -O bundle.zip
-unzip bundle.zip
 chown zimbra:zimbra $TMPFOLDER -R
 
 echo "Installing server extension"
 rm -Rf /opt/zimbra/lib/ext/de_dieploegers_groupcal
 mkdir -p /opt/zimbra/lib/ext/de_dieploegers_groupcal
 cp -v *.jar /opt/zimbra/lib/ext/de_dieploegers_groupcal/
-
-echo "Setting localconfig"
-su zimbra -c '/opt/zimbra/bin/zmlocalconfig -e groupcal_jdbc_driver="org.sqlite.JDBC"'
-su zimbra -c '/opt/zimbra/bin/zmlocalconfig -e groupcal_jdbc_url="jdbc:sqlite:/opt/zimbra/data/caching.db"'
+wget --no-cache https://github.com/Zimbra-Community/zimbra.de_dieploegers_groupcal/raw/master/serverextension/out/artifacts/serverextension_jar/serverextension.jar -O /opt/zimbra/lib/ext/de_dieploegers_groupcal/Groupcal.jar
 
 echo "Installing Zimlet"
+wget --no-cache https://github.com/Zimbra-Community/zimbra.de_dieploegers_groupcal/releases/download/0.0.1/de_dieploegers_groupcal.zip -O $TMPFOLDER/de_dieploegers_groupcal.zip
 su - zimbra -c "zmzimletctl -l deploy $TMPFOLDER/de_dieploegers_groupcal.zip"
 
 echo "Installing Python Script"
