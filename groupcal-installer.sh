@@ -124,9 +124,6 @@ for ((i = 2 ; i < 255 ; i++ )); do
 done
 
 echo "Starting Docker container"
-docker pull zetalliance/group-calendar:latest
-rm -Rf /opt/groupcal
-
 # Execute docker run command
 set +e
 docker container rm -f groupcal
@@ -134,6 +131,10 @@ docker image rm groupcal
 docker image rm zetalliance/group-calendar
 docker image rm zetalliance/group-calendar:latest
 set -e
+
+docker pull zetalliance/group-calendar:latest
+rm -Rf /opt/groupcal
+
 docker run --init --net zimbradocker \
              --ip $DOCKERIP \
              --name groupcal --restart=always -v /opt/groupcal:/opt/groupcal -d zetalliance/group-calendar:latest
