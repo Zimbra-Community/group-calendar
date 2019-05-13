@@ -123,22 +123,6 @@ for ((i = 2 ; i < 255 ; i++ )); do
    fi
 done
 
-echo "Starting Docker container"
-# Execute docker run command
-set +e
-docker container rm -f groupcal
-docker image rm groupcal
-docker image rm zetalliance/group-calendar
-docker image rm zetalliance/group-calendar:latest
-set -e
-
-docker pull zetalliance/group-calendar:latest
-rm -Rf /opt/groupcal
-
-docker run --init --net zimbradocker \
-             --ip $DOCKERIP \
-             --name groupcal --restart=always -v /opt/groupcal:/opt/groupcal -d zetalliance/group-calendar:latest
-
 set +e
 echo "Configuring firewallD, if you do not have firewallD, or see some errors here, configure the firewall manually"
 firewall-cmd --permanent --zone=public --add-rich-rule='
@@ -214,8 +198,22 @@ set -e
 ls -hal $TMPFOLDER
 rm -Rf $TMPFOLDER
 
-echo "Running initial sync"
-/usr/bin/docker exec groupcal /opt/groupcal/groupcal-run.sh
+echo "Starting Docker container"
+# Execute docker run command
+set +e
+docker container rm -f groupcal
+docker image rm groupcal
+docker image rm zetalliance/group-calendar
+docker image rm zetalliance/group-calendar:latest
+set -e
+
+docker pull zetalliance/group-calendar:latest
+rm -Rf /opt/groupcal
+
+docker run --init --net zimbradocker \
+             --ip $DOCKERIP \
+             --name groupcal --restart=always -v /opt/groupcal:/opt/groupcal -d zetalliance/group-calendar:latest
+
 
 su zimbra -c "/opt/zimbra/bin/zmmailboxdctl restart"
 
