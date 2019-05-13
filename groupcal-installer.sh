@@ -193,7 +193,7 @@ su zimbra -c "/opt/zimbra/bin/zmprov adlm sec_gcal_@$DOMAIN $GROUPCAL_USER"
 
 set +e
 echo "Setting up domain preauth key"
-su zimbra -c "zmprov generateDomainPreAuthKey $DOMAIN"
+su zimbra -c "/opt/zimbra/bin/zmprov generateDomainPreAuthKey $DOMAIN"
 set -e
 
 ls -hal $TMPFOLDER
