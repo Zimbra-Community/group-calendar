@@ -232,5 +232,5 @@ sec_gcal_@$DOMAIN
 
 Check the readme: https://github.com/Zimbra-Community/group-calendar
 
-The Docker container needs to be able to port 443 on $zimbra_server_hostname.
+The Docker container needs to be able to port 443 and 7071 on $zimbra_server_hostname.
 "
