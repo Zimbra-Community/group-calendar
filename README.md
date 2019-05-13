@@ -49,6 +49,10 @@ Usually, you put the team members into the gcal_-Group and the team manager
 into the sec_gcal_-Group. This way, the team manager has access all the 
 calendars of the team members.
 
+## Refresh
+
+The calendar refreshes every hour, you can force a refresh using command:
+`/etc/cron.hourly/groupcal` see also known bug: https://github.com/Zimbra-Community/group-calendar/issues/12
 
 ## Private appointments
 
