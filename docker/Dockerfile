@@ -22,7 +22,7 @@ RUN yum -y update \
    &&  yum -y install epel-release \
    && yum -y install yum-priorities
 
-RUN yum -y install net-tools nano wget curl 
+RUN yum -y install net-tools nano wget curl bind-utils
 
 RUN yum install -y https://centos7.iuscommunity.org/ius-release.rpm
 

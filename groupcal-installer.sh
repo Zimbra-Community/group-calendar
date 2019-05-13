@@ -139,6 +139,18 @@ docker run --init --net zimbradocker \
              --ip $DOCKERIP \
              --name groupcal --restart=always -v /opt/groupcal:/opt/groupcal -d zetalliance/group-calendar:latest
 
+set +e
+echo "Configuring firewallD, if you do not have firewallD, or see some errors here, configure the firewall manually"
+firewall-cmd --permanent --zone=public --add-rich-rule='
+   rule family="ipv4"
+   source address="'$DOCKERIP'/32"
+   port protocol="tcp" port="443" accept'
+firewall-cmd --permanent --zone=public --add-rich-rule='
+   rule family="ipv4"
+   source address="'$DOCKERIP'/32"
+   port protocol="tcp" port="7071" accept'
+firewall-cmd --reload
+set -e
 
 TMPFOLDER="$(mktemp -d /tmp/groupcal-installer.XXXXXXXX)"
 cd $TMPFOLDER
@@ -195,6 +207,7 @@ su zimbra -c "/opt/zimbra/bin/zmprov adlm gcal_@$DOMAIN $GROUPCAL_USER"
 su zimbra -c "/opt/zimbra/bin/zmprov adlm sec_gcal_@$DOMAIN $GROUPCAL_USER"
 
 set +e
+echo "Setting up domain preauth key"
 su zimbra -c "zmprov generateDomainPreAuthKey $DOMAIN"
 set -e
 

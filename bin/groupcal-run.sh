@@ -17,5 +17,5 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see http://www.gnu.org/licenses/.
 
-/usr/bin/python3.6 /etc/groupcal/groupcal.py -d --dbpassword somepassword zimbraserver USERNAME PASSWORD
+/usr/bin/python3.6 /etc/groupcal/groupcal.py -d --dbuser root --dbpassword '' zimbraserver USERNAME PASSWORD
 
