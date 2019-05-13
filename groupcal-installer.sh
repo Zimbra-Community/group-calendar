@@ -122,6 +122,12 @@ docker pull zetalliance/group-calendar:latest
 rm -Rf /opt/groupcal
 
 # Execute docker run command
+set +e
+docker container rm -f groupcal
+docker image rm groupcal
+docker image rm zetalliance/group-calendar
+docker image rm zetalliance/group-calendar:latest
+set -e
 docker run --init --net zimbradocker \
              --ip $DOCKERIP \
              --name groupcal --restart=always -v /opt/groupcal:/opt/groupcal -d zetalliance/group-calendar:latest
@@ -142,9 +148,9 @@ DB_PWD=$(< /dev/urandom tr -dc A-Za-z0-9 | head -c${1:-10};echo;)
 echo "db_connect_string=jdbc:mariadb://$DOCKERIP:3306/groupcal_db?user=ad-groupcal_db&password=$DB_PWD" > /opt/zimbra/lib/ext/de_dieploegers_groupcal/db.properties
 
 cat <<EOF > "/opt/groupcal/create-user.sql"
-DROP USER 'ad-groupcal_db'@'%';
 CREATE USER 'ad-groupcal_db'@'%' IDENTIFIED BY '${DB_PWD}'; 
 GRANT ALL PRIVILEGES ON groupcal_db . * TO 'ad-groupcal_db'@'%' WITH GRANT OPTION; 
+GRANT ALL PRIVILEGES ON groupcal_db . * TO 'ad-groupcal_db'@'localhost' WITH GRANT OPTION; 
 FLUSH PRIVILEGES ; 
 EOF
 
@@ -181,15 +187,16 @@ su zimbra -c "/opt/zimbra/bin/zmprov mdl sec_gcal_@$DOMAIN displayName 'Security
 su zimbra -c "/opt/zimbra/bin/zmprov adlm gcal_@$DOMAIN $GROUPCAL_USER"
 su zimbra -c "/opt/zimbra/bin/zmprov adlm sec_gcal_@$DOMAIN $GROUPCAL_USER"
 
+set +e
+su zimbra -c "zmprov generateDomainPreAuthKey $DOMAIN"
+set -e
+
 ls -hal $TMPFOLDER
 rm -Rf $TMPFOLDER
 
 echo "Running initial sync"
 /usr/bin/docker exec groupcal /opt/groupcal/groupcal-run.sh
 
-set +e
-su zimbra -c "zmprov generateDomainPreAuthKey $DOMAIN"
-set -e
 su zimbra -c "/opt/zimbra/bin/zmmailboxdctl restart"
 
 echo "Setting up cron in /etc/cron.hourly/groupcal"
