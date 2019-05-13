@@ -141,6 +141,7 @@ cd $TMPFOLDER
 
 echo "Fetching the latest Groupcal release"
 chown zimbra:zimbra $TMPFOLDER -R
+rm -Rf /opt/groupcal
 mkdir /opt/groupcal
 
 echo "Installing server extension"
@@ -209,13 +210,14 @@ docker image rm zetalliance/group-calendar:latest
 set -e
 
 docker pull zetalliance/group-calendar:latest
-rm -Rf /opt/groupcal
 
 docker run --init --net zimbradocker \
              --ip $DOCKERIP \
              --name groupcal --restart=always -v /opt/groupcal:/opt/groupcal -d zetalliance/group-calendar:latest
 
 
+# cd to /tmp to fix useless cwd errors from mailbox restart
+cd /tmp
 su zimbra -c "/opt/zimbra/bin/zmmailboxdctl restart"
 
 echo "Setting up cron in /etc/cron.hourly/groupcal"
