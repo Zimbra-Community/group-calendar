@@ -33,6 +33,23 @@ Automated installer for CentOS 7 and Ubuntu, run it on all your mailbox servers.
     chmod +rx /tmp/groupcal-installer.sh
     /tmp/groupcal-installer.sh
 
+## Usage
+
+The group calendars are defined using the membership in specific groups (distribution lists).
+
+To create a group calendar out of appointments of a set of users, 
+create a new distribution list called gcal_<name of group calendar>@<domain> 
+and put the users into this distribution list.
+
+To make this group calendar available to specific users, 
+create another distribution list called sec_gcal_<name of group 
+calendar>@<domain> and put that users there.
+
+Usually, you put the team members into the gcal_-Group and the team manager 
+into the sec_gcal_-Group. This way, the team manager has access all the 
+calendars of the team members.
+
+
 ## Private appointments
 
 Private appointments are ignored by Group Calendar, 
