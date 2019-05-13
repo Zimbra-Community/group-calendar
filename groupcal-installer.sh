@@ -141,6 +141,7 @@ cd $TMPFOLDER
 
 echo "Fetching the latest Groupcal release"
 chown zimbra:zimbra $TMPFOLDER -R
+mkdir /opt/groupcal
 
 echo "Installing server extension"
 rm -Rf /opt/zimbra/lib/ext/de_dieploegers_groupcal
