@@ -38,22 +38,28 @@ echo "THIS IS A WORK IN PROGRESS - ABORT NOW, HIT CTRL+C"
 echo "Any key to continue or CTRL+C to abort."
 read dummy;
 
-DEFAULT_DOMAIN=$(su zimbra -c "/opt/zimbra/bin/zmprov gad | head -n 1")
-
-echo "Please enter the Zimbra email domain to create the Groupcal."
-echo "The domain must already be configured on your Zimbra. Default: $DEFAULT_DOMAIN"
-read DOMAIN;
-
-if [ -z "$DOMAIN" ]
-then
-DOMAIN=$DEFAULT_DOMAIN
-fi
-
 echo "Check if yum/apt installed."
 set +e
 YUM_CMD=$(which yum)
 APT_CMD=$(which apt-get)
 set -e 
+
+if [[ ! -z $YUM_CMD ]]; then
+   yum install -y newt
+else
+   apt install -y whiptail
+fi
+
+# is there an easier way to do this, whiptail sucks?
+domains=$(su zimbra -c "/opt/zimbra/bin/zmprov -l gad | sed -r 's/(.*)/\1 \1/'")
+
+DOMAIN=$(whiptail --notags --backtitle "Zimbra 2FA Installer" --menu "Select domain to configure for Group Calendar" 20 80 10 $domains 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+[[ "$exitstatus" = 1 ]] && exit 0;
+
+
+
 
 if [[ ! -z $YUM_CMD ]]; then
 echo "Removing Docker distro packages"
