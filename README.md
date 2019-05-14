@@ -48,7 +48,7 @@ calendars of the team members.
 ## Refresh
 
 The calendar refreshes every hour, you can force a refresh using command:
-`/etc/cron.hourly/groupcal` see also known bug: https://github.com/Zimbra-Community/group-calendar/issues/12
+`/etc/cron.hourly/groupcal`.
 
 ## Private appointments
 
