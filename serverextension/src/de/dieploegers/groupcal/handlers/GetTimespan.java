@@ -86,7 +86,6 @@ public class GetTimespan extends DocumentHandler {
             connection.close();
 
         } catch (Exception e) {
-            throw ServiceException.FAILURE("Error speaking to database.", e);
 
         }
 

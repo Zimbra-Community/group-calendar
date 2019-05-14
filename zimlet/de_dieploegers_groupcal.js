@@ -43,7 +43,7 @@ de_dieploegers_groupcalHandlerObject.prototype.appActive =
 
 de_dieploegers_groupcalHandlerObject.prototype.appLaunch =
     function (appName) {
-
+        var zimletInstance = appCtxt._zimletMgr.getZimletByName('de_dieploegers_groupcal').handlerObject;
         var overview;
 
         if (appName === this.appName) {
@@ -260,36 +260,39 @@ de_dieploegers_groupcalHandlerObject.prototype.appLaunch =
 
             this.infoPane.setImage("Information");
 
-            this.infoPane.setText(AjxMessageFormat.format(
-                this.getMessage("TOOLBAR_INFO"),
-                [
-                    AjxMessageFormat.format(I18nMsg.formatDateTime,
-                        [
-                            AjxDateFormat.format(
-                                I18nMsg.formatDateFull,
-                                this.startDate
-                            ),
-                            AjxDateFormat.format(
-                                I18nMsg.formatTimeMedium,
-                                this.startDate
-                            )
-                        ]),
-                    AjxMessageFormat.format(I18nMsg.formatDateTime,
-                        [
-                            AjxDateFormat.format(
-                                I18nMsg.formatDateFull,
-                                this.endDate
-                            ),
-                            AjxDateFormat.format(
-                                I18nMsg.formatTimeMedium,
-                                this.endDate
-                            )
-                        ])
-                ]
-            ));
-
-            this.toolbar.addChild(this.infoPane);
-
+            try {
+               this.infoPane.setText(AjxMessageFormat.format(
+                   this.getMessage("TOOLBAR_INFO"),
+                   [
+                       AjxMessageFormat.format(I18nMsg.formatDateTime,
+                           [
+                               AjxDateFormat.format(
+                                   I18nMsg.formatDateFull,
+                                   this.startDate
+                               ),
+                               AjxDateFormat.format(
+                                   I18nMsg.formatTimeMedium,
+                                   this.startDate
+                               )
+                           ]),
+                       AjxMessageFormat.format(I18nMsg.formatDateTime,
+                           [
+                               AjxDateFormat.format(
+                                   I18nMsg.formatDateFull,
+                                   this.endDate
+                               ),
+                               AjxDateFormat.format(
+                                   I18nMsg.formatTimeMedium,
+                                   this.endDate
+                               )
+                           ])
+                   ]
+               ));
+   
+               this.toolbar.addChild(this.infoPane);
+            } catch (err) {
+               appCtxt.getCurrentApp().setContent('<div style="padding:25px">'+zimletInstance.getMessage('ERROR_NOTIMESPAN')+ ' <button onclick="location.reload();">'+ ZmMsg.reload +'</button></div>')
+            }
         }
 
     };
@@ -808,42 +811,25 @@ de_dieploegers_groupcalHandlerObject.prototype.handleFetchPersonData =
  */
 
 de_dieploegers_groupcalHandlerObject.prototype.handleGetTimespan =
-    function (response) {
-
-        var getTimespan;
-
-        if (response.isZmCsfeException) {
-
-            if (response.code == "service.NOT_FOUND") {
-
-                // No timespan available. Remove app and show message
-
-                appCtxt.getAppController().getAppChooser().removeButton(
-                    this.app.getName()
-                );
-
-                this.displayErrorMessage(
-                    this.getMessage("ERROR_NOTIMESPAN"),
-                    null,
-                    this.getMessage("ERROR_TITLE")
-                );
-
-                return true;
-
-            } else {
-
-                throw response.getException();
-
-            }
-
-        }
-
-        getTimespan = response.getResponse().GetTimespanResponse;
-
-        this.startDate = new Date(getTimespan.start._content * 1000);
-        this.endDate = new Date(getTimespan.end._content * 1000);
-
-    };
+function (response) 
+{
+   var getTimespan;
+   
+   try {
+      getTimespan = response.getResponse().GetTimespanResponse;         
+      this.startDate = new Date(getTimespan.start._content * 1000);
+      this.endDate = new Date(getTimespan.end._content * 1000);
+   }
+   catch(err)
+   {
+      var future = new Date();
+      future.setDate(future.getDate() + 30);
+      var past = new Date();
+      past.setDate(past.getDate() - 30);
+      this.startDate = past * 1000;
+      this.endDate = future * 1000;
+   }     
+};
 
 /**
  * Handle selections in the overview tree
