@@ -33,7 +33,7 @@ echo "This installer will set-up Group Calendar for Zimbra, this installer is pr
 echo "https://github.com/Zimbra-Community/group-calendar/blob/master/LICENSE"
 echo "This installer will set-up a docker container and restarts mailbox."
 
-echo "THIS IS A WORK IN PROGRESS - ABORT NOW, HIT CTRL+C"
+echo "This installer is a beta release! It has only been tested on CentOS 7..."
 
 echo "Any key to continue or CTRL+C to abort."
 read dummy;
@@ -160,7 +160,7 @@ FLUSH PRIVILEGES ;
 EOF
 
 echo "Installing Zimlet"
-wget --no-cache https://github.com/Zimbra-Community/group-calendar/releases/download/2.0.0/de_dieploegers_groupcal.zip -O $TMPFOLDER/de_dieploegers_groupcal.zip
+wget --no-cache https://github.com/Zimbra-Community/group-calendar/releases/download/2.0.1/de_dieploegers_groupcal.zip -O $TMPFOLDER/de_dieploegers_groupcal.zip
 su - zimbra -c "zmzimletctl -l deploy $TMPFOLDER/de_dieploegers_groupcal.zip"
 
 echo "Creating admin user for sync"
