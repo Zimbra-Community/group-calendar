@@ -263,10 +263,11 @@ if __name__ == '__main__':
     db = mariadb.connect(user=options.dbuser, password=options.dbpassword, database=options.dbname, port=options.dbport, host=options.dbhost)
     c = db.cursor()
 
-    # We don't sync here, so simply drop the
-    # table. It is recreated afterwards
-
-    c.execute("TRUNCATE TABLE APPTCACHE")
+    # We use replace into, to (re)populate the appointment cache, but we need some way to track deleted appointments
+    # so we set all current appointments to active=0, if they are updated with replace-into, active is set to 1
+    # all appointments that remain active=0 are no longer in the source, so we delete them.
+    # db.commit does not work on DDL (DROP TABLE, TRUNCATE) so this used to be a design flaw in this project
+    c.execute("UPDATE APPTCACHE SET `ACTIVE` = '0';")
 
     preauth_cache = {}
 
@@ -490,8 +491,8 @@ if __name__ == '__main__':
                     c.execute(
                         "replace into APPTCACHE ("
                         "ID, RECURRENCEID, ACCOUNT, START_TIMESTAMP, "
-                        "END_TIMESTAMP, APPTDATA"
-                        ") VALUES (%s,%s,%s,%s,%s,%s)",
+                        "END_TIMESTAMP, APPTDATA, ACTIVE"
+                        ") VALUES (%s,%s,%s,%s,%s,%s,1)",
                         (
                             "%s%d" % (temp_appt["id"], inst_id),
                             inst["ridZ"],
@@ -533,7 +534,7 @@ if __name__ == '__main__':
                 break
 
     # Commit work
-
+    c.execute("DELETE FROM APPTCACHE WHERE `ACTIVE` = '0';")
     db.commit()
 
     logging.debug("Finished")
