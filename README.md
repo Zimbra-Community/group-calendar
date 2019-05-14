@@ -1,8 +1,4 @@
-# Work in progress DO NOT INSTALL
-
-
-
-# Aggregated calendars for Zimbra Collaboration Server
+# Aggregated calendars for Zimbra Collaboration Server (BETA)
 
 ## Introduction
 
