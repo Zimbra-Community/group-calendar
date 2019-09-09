@@ -60,7 +60,7 @@ if __name__ == '__main__':
         action="store",
         dest="start",
         help="Sync x days back (defaults to 14)",
-        default=14,
+        default=300,
         type="int"
     )
 
@@ -70,7 +70,7 @@ if __name__ == '__main__':
         action="store",
         dest="end",
         help="Sync until x days (defaults to 62)",
-        default=62,
+        default=600,
         type="int"
     )
 
