@@ -160,7 +160,7 @@ FLUSH PRIVILEGES ;
 EOF
 
 echo "Installing Zimlet"
-wget --no-cache https://github.com/Zimbra-Community/group-calendar/releases/download/2.0.1/de_dieploegers_groupcal.zip -O $TMPFOLDER/de_dieploegers_groupcal.zip
+wget --no-cache https://github.com/Zimbra-Community/group-calendar/releases/download/2.0.2/de_dieploegers_groupcal.zip -O $TMPFOLDER/de_dieploegers_groupcal.zip
 su - zimbra -c "zmzimletctl -l deploy $TMPFOLDER/de_dieploegers_groupcal.zip"
 
 echo "Creating admin user for sync"
