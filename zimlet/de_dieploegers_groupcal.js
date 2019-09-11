@@ -543,7 +543,6 @@ de_dieploegers_groupcalHandlerObject.prototype.handleCalendarNavigation =
         } else {
 
             // Forwards or Backwards
-
             this.currentViewDate = AjxDateUtil.roll(
                 this.currentViewDate,
                 rollField,
@@ -1146,8 +1145,12 @@ de_dieploegers_groupcalHandlerObject.prototype.rebuildCalendar =
         this.calendarView.set(apptList, true);
 
         // Refresh positioning of appts
-
-        this.calendarView._layoutAppts();
+        //no longer exists in month view?
+        try {
+           this.calendarView._layoutAppts();
+        } catch(err)
+        {
+        }
 
         // Focus the search field
 

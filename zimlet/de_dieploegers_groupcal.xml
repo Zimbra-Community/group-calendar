@@ -4,7 +4,7 @@
     Description: Group calendar zimlet
 -->
 
-<zimlet name="de_dieploegers_groupcal" version="1.1" label="Group Calendar" description="Aggregated calendars for Zimbra">
+<zimlet name="de_dieploegers_groupcal" version="1.2" label="Group Calendar" description="Aggregated calendars for Zimbra">
     <include>de_dieploegers_groupcal.js</include>
     <include>de_dieploegers_groupcalAutocomplete.js</include>
     <include>de_dieploegers_groupcalMonthView.js</include>
