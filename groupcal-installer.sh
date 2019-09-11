@@ -33,7 +33,7 @@ echo "This installer will set-up Group Calendar for Zimbra, this installer is pr
 echo "https://github.com/Zimbra-Community/group-calendar/blob/master/LICENSE"
 echo "This installer will set-up a docker container and restarts mailbox."
 
-echo "This installer is a beta release! It has only been tested on CentOS 7..."
+echo "This installer is a beta release! It has only been tested on CentOS 7 and Ubuntu Xenial..."
 
 echo "Any key to continue or CTRL+C to abort."
 read dummy;
