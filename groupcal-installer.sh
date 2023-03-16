@@ -209,7 +209,12 @@ docker image rm zetalliance/group-calendar
 docker image rm zetalliance/group-calendar:latest
 set -e
 
-docker pull zetalliance/group-calendar:latest
+#dockerhub is no more
+#docker pull zetalliance/group-calendar:latest
+cd /tmp
+wget https://docker.zetalliance.org/zetalliance-group-calendar.tgz -O /tmp/zetalliance-group-calendar.tgz
+docker load < /tmp/zetalliance-group-calendar.tgz
+rm -f /tmp/zetalliance-group-calendar.tgz
 
 docker run --init --net zimbradocker \
              --ip $DOCKERIP \
